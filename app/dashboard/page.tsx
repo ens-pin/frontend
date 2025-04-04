@@ -1,5 +1,33 @@
 'use client';
-import { useState } from 'react';
+import {useState, useMemo} from "react"
+import { Label, Pie, PieChart, Cell } from "recharts"
+import type { PieLabel } from "recharts"
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
+
+const pieChartData = [
+  { status: "Online", deviceNumber: 24, fill: "#22c55e" },  // Green color
+  { status: "Offline", deviceNumber: 6, fill: "#ef4444" },  // Red color
+]
+
+
+const pieChartConfig = {
+  devices: {
+    label: "Devices",
+  },
+  online: {
+    label: "Online",
+    color: "#22c55e",
+  },
+  offline: {
+    label: "Offline",
+    color: "#ef4444",
+  },
+} satisfies ChartConfig
 
 export default function Dashboard() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -9,44 +37,104 @@ export default function Dashboard() {
         setIsSidebarOpen(!isSidebarOpen);
     };
 
+    const totalActiveDevices = useMemo(() => {
+        return pieChartData.reduce((acc, curr) => 
+            curr.status === "Online" ? acc + curr.deviceNumber : acc, 0)
+    }, [])
+    
+
     // Tab content components
     const OverviewContent = () => (
         <>
-            <h1 className="text-4xl font-bold mb-6 text-gray-800">Dashboard Overview</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
-                    <h3 className="text-xl font-semibold mb-2 text-gray-700">Total Users</h3>
-                    <p className="text-3xl font-bold text-gray-800">10,234</p>
-                </div>
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
-                    <h3 className="text-xl font-semibold mb-2 text-gray-700">Revenue</h3>
-                    <p className="text-3xl font-bold text-gray-800">$45,678</p>
-                </div>
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
-                    <h3 className="text-xl font-semibold mb-2 text-gray-700">Active Projects</h3>
-                    <p className="text-3xl font-bold text-gray-800">25</p>
+            <h1 className="text-4xl font-bold mb-6 text-white">Dashboard Overview</h1>
+            <div className="bg-black p-6 rounded-lg border border-gray-800">
+                <h3 className="text-2xl font-semibold mb-4 text-gray-300">System Statistics</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="border-b md:border-b-0 md:border-r border-gray-800 pb-4 md:pb-0 md:pr-4">
+                        <p className="text-gray-400 text-xl mb-1 text-center">Total IPFS Hash Pinned</p>
+                        <p className="text-3xl font-bold text-blue-400 text-center">300</p>
+                    </div>
+                    <div className="border-b md:border-b-0 md:border-r border-gray-800 pb-4 md:pb-0 md:px-4">
+                        <p className="text-gray-400 mb-2 text-xl text-center">Active Devices</p>
+                        <ChartContainer
+                            config={pieChartConfig}
+                            className="mx-auto aspect-square max-h-[250px]"
+                          >
+                            <PieChart>
+                              <ChartTooltip
+                                cursor={false}
+                                content={<ChartTooltipContent hideLabel />}
+                              />
+                              <Pie
+                                data={pieChartData}
+                                dataKey="deviceNumber"
+                                nameKey="status"
+                                innerRadius={60}
+                                strokeWidth={5}
+                                label={false}
+                              >
+                                {pieChartData.map((entry, index) => (
+                                  <Cell key={`cell-${index}`} fill={entry.fill} />
+                                ))}
+                                <Label
+                                  value={totalActiveDevices}
+                                  position="center"
+                                  style={{ fill: 'white', fontSize: '30px', fontWeight: 'bold' }}
+                                />
+                              </Pie>
+                            </PieChart>
+                          </ChartContainer>
+                    </div>
+                    <div className="md:pl-4">
+                        <p className="text-gray-400 text-xl mb-1 text-center">Storage Used</p>
+                        <p className="text-3xl font-bold text-purple-400 text-center">1.2 TB</p>
+                    </div>
                 </div>
             </div>
         </>
     );
 
-    const AnalyticsContent = () => (
+    const DevicesContent = () => (
         <>
-            <h1 className="text-4xl font-bold mb-6 text-gray-800">Analytics</h1>
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-                <h3 className="text-xl font-semibold mb-4 text-gray-700">Performance Metrics</h3>
+            <h1 className="text-4xl font-bold mb-6 text-white">Devices</h1>
+            <div className="bg-black p-6 rounded-lg border border-gray-800">
+                <h3 className="text-xl font-semibold mb-4 text-gray-300">Connected Devices</h3>
                 <div className="space-y-4">
-                    <div className="border-b pb-4">
-                        <p className="text-gray-600">Monthly Growth</p>
-                        <p className="text-2xl font-bold text-green-600">+15.8%</p>
+                    <div className="border-b border-gray-800 pb-4">
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <p className="text-gray-300 font-medium">Smart Thermostat</p>
+                                <p className="text-sm text-gray-500">Living Room</p>
+                            </div>
+                            <span className="text-green-400">Online</span>
+                        </div>
                     </div>
-                    <div className="border-b pb-4">
-                        <p className="text-gray-600">User Engagement</p>
-                        <p className="text-2xl font-bold text-blue-600">73%</p>
+                    <div className="border-b border-gray-800 pb-4">
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <p className="text-gray-300 font-medium">Security Camera</p>
+                                <p className="text-sm text-gray-500">Front Door</p>
+                            </div>
+                            <span className="text-green-400">Online</span>
+                        </div>
+                    </div>
+                    <div className="border-b border-gray-800 pb-4">
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <p className="text-gray-300 font-medium">Smart Light</p>
+                                <p className="text-sm text-gray-500">Bedroom</p>
+                            </div>
+                            <span className="text-red-400">Offline</span>
+                        </div>
                     </div>
                     <div>
-                        <p className="text-gray-600">Conversion Rate</p>
-                        <p className="text-2xl font-bold text-purple-600">4.2%</p>
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <p className="text-gray-300 font-medium">Smart Lock</p>
+                                <p className="text-sm text-gray-500">Garage Door</p>
+                            </div>
+                            <span className="text-green-400">Online</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -55,21 +143,21 @@ export default function Dashboard() {
 
     const ReportsContent = () => (
         <>
-            <h1 className="text-4xl font-bold mb-6 text-gray-800">Reports</h1>
+            <h1 className="text-4xl font-bold mb-6 text-white">Reports</h1>
             <div className="space-y-6">
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
-                    <h3 className="text-xl font-semibold mb-4 text-gray-700">Recent Reports</h3>
+                <div className="bg-black p-6 rounded-lg border border-gray-800">
+                    <h3 className="text-xl font-semibold mb-4 text-gray-300">Recent Reports</h3>
                     <div className="space-y-4">
-                        <div className="flex items-center justify-between border-b pb-2">
-                            <span className="text-gray-600">Q4 Financial Summary</span>
+                        <div className="flex items-center justify-between border-b border-gray-800 pb-2">
+                            <span className="text-gray-300">Q4 Financial Summary</span>
                             <span className="text-sm text-gray-500">Dec 31, 2023</span>
                         </div>
-                        <div className="flex items-center justify-between border-b pb-2">
-                            <span className="text-gray-600">Annual Performance Review</span>
+                        <div className="flex items-center justify-between border-b border-gray-800 pb-2">
+                            <span className="text-gray-300">Annual Performance Review</span>
                             <span className="text-sm text-gray-500">Dec 15, 2023</span>
                         </div>
                         <div className="flex items-center justify-between">
-                            <span className="text-gray-600">Marketing Campaign Results</span>
+                            <span className="text-gray-300">Marketing Campaign Results</span>
                             <span className="text-sm text-gray-500">Nov 30, 2023</span>
                         </div>
                     </div>
@@ -80,30 +168,30 @@ export default function Dashboard() {
 
     const SettingsContent = () => (
         <>
-            <h1 className="text-4xl font-bold mb-6 text-gray-800">Settings</h1>
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-                <h3 className="text-xl font-semibold mb-4 text-gray-700">Account Settings</h3>
+            <h1 className="text-4xl font-bold mb-6 text-white">Settings</h1>
+            <div className="bg-black p-6 rounded-lg border border-gray-800">
+                <h3 className="text-xl font-semibold mb-4 text-gray-300">Account Settings</h3>
                 <div className="space-y-4">
-                    <div className="flex items-center justify-between border-b pb-4">
+                    <div className="flex items-center justify-between border-b border-gray-800 pb-4">
                         <div>
-                            <p className="font-medium text-gray-800">Notifications</p>
+                            <p className="font-medium text-gray-300">Notifications</p>
                             <p className="text-sm text-gray-500">Manage your notification preferences</p>
                         </div>
-                        <button className="px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200">Configure</button>
+                        <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Configure</button>
                     </div>
-                    <div className="flex items-center justify-between border-b pb-4">
+                    <div className="flex items-center justify-between border-b border-gray-800 pb-4">
                         <div>
-                            <p className="font-medium text-gray-800">Privacy</p>
+                            <p className="font-medium text-gray-300">Privacy</p>
                             <p className="text-sm text-gray-500">Control your privacy settings</p>
                         </div>
-                        <button className="px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200">Manage</button>
+                        <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Manage</button>
                     </div>
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="font-medium text-gray-800">Security</p>
+                            <p className="font-medium text-gray-300">Security</p>
                             <p className="text-sm text-gray-500">Update your security preferences</p>
                         </div>
-                        <button className="px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200">Review</button>
+                        <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Review</button>
                     </div>
                 </div>
             </div>
@@ -114,8 +202,8 @@ export default function Dashboard() {
         switch (activeTab) {
             case 'overview':
                 return <OverviewContent />;
-            case 'analytics':
-                return <AnalyticsContent />;
+            case 'devices':
+                return <DevicesContent />;
             case 'reports':
                 return <ReportsContent />;
             case 'settings':
@@ -126,35 +214,35 @@ export default function Dashboard() {
     };
 
     return (
-        <div className="min-h-screen flex bg-gray-50">
+        <div className="min-h-screen flex bg-black">
             {/* Sidebar */}
-            <div className={`bg-white text-gray-800 w-64 fixed h-full transition-transform duration-300 ease-in-out border-r ${
+            <div className={`bg-black text-white w-64 fixed h-full transition-transform duration-300 ease-in-out border-r border-gray-800 ${
                 isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
             } md:translate-x-0`}>
                 <div className="p-4">
-                    <h2 className="text-2xl font-semibold text-gray-800">Dashboard Menu</h2>
+                    <h2 className="text-2xl font-semibold text-white">Dashboard Menu</h2>
                     <nav className="mt-8">
                         <ul className="space-y-2">
                             <li 
-                                className={`p-2 rounded cursor-pointer ${activeTab === 'overview' ? 'bg-gray-100 text-gray-900' : 'hover:bg-gray-100'}`}
+                                className={`p-2 rounded cursor-pointer ${activeTab === 'overview' ? 'text-white' : 'hover:bg-gray-900'}`}
                                 onClick={() => setActiveTab('overview')}
                             >
                                 Overview
                             </li>
                             <li 
-                                className={`p-2 rounded cursor-pointer ${activeTab === 'analytics' ? 'bg-gray-100 text-gray-900' : 'hover:bg-gray-100'}`}
-                                onClick={() => setActiveTab('analytics')}
+                                className={`p-2 rounded cursor-pointer ${activeTab === 'devices' ? 'text-white' : 'hover:bg-gray-900'}`}
+                                onClick={() => setActiveTab('devices')}
                             >
-                                Analytics
+                                Devices
                             </li>
                             <li 
-                                className={`p-2 rounded cursor-pointer ${activeTab === 'reports' ? 'bg-gray-100 text-gray-900' : 'hover:bg-gray-100'}`}
+                                className={`p-2 rounded cursor-pointer ${activeTab === 'reports' ? 'text-white' : 'hover:bg-gray-900'}`}
                                 onClick={() => setActiveTab('reports')}
                             >
                                 Reports
                             </li>
                             <li 
-                                className={`p-2 rounded cursor-pointer ${activeTab === 'settings' ? 'bg-gray-100 text-gray-900' : 'hover:bg-gray-100'}`}
+                                className={`p-2 rounded cursor-pointer ${activeTab === 'settings' ? 'text-white' : 'hover:bg-gray-900'}`}
                                 onClick={() => setActiveTab('settings')}
                             >
                                 Settings
@@ -167,12 +255,12 @@ export default function Dashboard() {
             {/* Main Content */}
             <div className="flex-1 md:ml-64">
                 {/* Header */}
-                <header className="bg-white shadow-sm p-4 border-b">
+                <header className="bg-black shadow-sm p-4 border-b border-gray-800">
                     <button 
                         onClick={toggleSidebar}
-                        className="md:hidden p-2 rounded-md hover:bg-gray-100"
+                        className="md:hidden p-2 rounded-md hover:bg-gray-900"
                     >
-                        <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
