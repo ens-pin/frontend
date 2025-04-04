@@ -3,10 +3,12 @@ import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
 import ScrollReveal from "@/components/ScrollReveal";
 import Image from "next/image";
+import Dashboard from "./dashboard/page";
 
 export default function Home() {
   return (
     <>
+      <>
       <Navbar />
       <Hero/>
       <ScrollReveal
@@ -18,6 +20,7 @@ export default function Home() {
         Testing testing
       </ScrollReveal>
       <Developer/>
+    </>
     </>
   );
 }
