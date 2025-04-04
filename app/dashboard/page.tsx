@@ -1,7 +1,6 @@
 'use client';
 import {useState, useMemo} from "react"
-import { Label, Pie, PieChart, Cell } from "recharts"
-import type { PieLabel } from "recharts"
+import { Label, Pie, PieChart, Line, LineChart, Cell, CartesianGrid, XAxis } from "recharts"
 import {
   ChartConfig,
   ChartContainer,
@@ -14,6 +13,20 @@ const pieChartData = [
   { status: "Offline", deviceNumber: 6, fill: "#ef4444" },  // Red color
 ]
 
+const lineChartData = [
+  { month: "January", pinnedHash: 186 },
+  { month: "February", pinnedHash: 305 },
+  { month: "March", pinnedHash: 237 },
+  { month: "April", pinnedHash: 273 },
+  { month: "May", pinnedHash: 209 },
+  { month: "June", pinnedHash: 214 },
+  { month: "July", pinnedHash: 253 },
+  { month: "August", pinnedHash: 328 },
+  { month: "September", pinnedHash: 298 },
+  { month: "October", pinnedHash: 265 },
+  { month: "November", pinnedHash: 289 },
+  { month: "December", pinnedHash: 300 }
+]
 
 const pieChartConfig = {
   devices: {
@@ -28,6 +41,15 @@ const pieChartConfig = {
     color: "#ef4444",
   },
 } satisfies ChartConfig
+
+
+const lineChartConfig = {
+  pinnedHash: {
+    label: "Pinned IPFS Hash",
+    color: "hsl(var(--chart-1))",
+  },
+} satisfies ChartConfig
+
 
 export default function Dashboard() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -48,11 +70,40 @@ export default function Dashboard() {
         <>
             <h1 className="text-4xl font-bold mb-6 text-white">Dashboard Overview</h1>
             <div className="bg-black p-6 rounded-lg border border-gray-800">
-                <h3 className="text-2xl font-semibold mb-4 text-gray-300">System Statistics</h3>
+                <h3 className="text-2xl font-semibold mb-8 text-gray-300">System Statistics</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div className="border-b md:border-b-0 md:border-r border-gray-800 pb-4 md:pb-0 md:pr-4">
                         <p className="text-gray-400 text-xl mb-1 text-center">Total IPFS Hash Pinned</p>
-                        <p className="text-3xl font-bold text-blue-400 text-center">300</p>
+                        <ChartContainer config={lineChartConfig}>
+                          <LineChart
+                            accessibilityLayer
+                            data={lineChartData}
+                            margin={{
+                              left: 12,
+                              right: 12,
+                            }}
+                          >
+                            <CartesianGrid vertical={false} />
+                            <XAxis
+                              dataKey="month"
+                              tickLine={false}
+                              axisLine={false}
+                              tickMargin={8}
+                              tickFormatter={(value) => value.slice(0, 3)}
+                            />
+                            <ChartTooltip
+                              cursor={false}
+                              content={<ChartTooltipContent hideLabel />}
+                            />
+                            <Line
+                              dataKey="pinnedHash"
+                              type="linear"
+                              stroke="#60a5fa"
+                              strokeWidth={2}
+                              dot={false}
+                            />
+                          </LineChart>
+                        </ChartContainer>
                     </div>
                     <div className="border-b md:border-b-0 md:border-r border-gray-800 pb-4 md:pb-0 md:px-4">
                         <p className="text-gray-400 mb-2 text-xl text-center">Active Devices</p>
