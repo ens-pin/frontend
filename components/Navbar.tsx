@@ -9,7 +9,6 @@ const navLinks = [
   { title: "About Us", path: "#aboutus" },
   { title: "Developer", path: "#developer" },
   { title: "Contact", path: "#contact" },
-  { title: "Dashboard", path: "/dashboard" },
 ];
 
 const Navbar = () => {
@@ -47,8 +46,8 @@ const Navbar = () => {
           ))}
         </ul>
         <div className="hidden md:flex">
-          <Link href="/get-started">
-            <button className="ml-4 px-6 py-2 rounded-full bg-white text-black hover:bg-white/80 transition">
+          <Link href="/docs">
+            <button className="ml-4 px-6 py-2 rounded-full bg-white text-black hover:cursor-pointer hover:bg-white/80 transition">
               Get Started
             </button>
           </Link>

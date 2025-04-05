@@ -2,7 +2,6 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { NodeCount } from './NodeCount';
 import { HostedUsers } from './HostedUsers';
-import HostedUsersBubbleChart from './HostedUsersBubbleChart';
 
 interface Node {
     id: string;
