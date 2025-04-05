@@ -42,9 +42,14 @@ export function AddNodeTab() {
             
             const usedFormatted = formatBytes(used);
             const totalFormatted = formatBytes(total);
-            const percentage = total > 0 ? Math.round((used / total) * 100) : 0;
             
-            return `${usedFormatted} / ${totalFormatted} (${percentage}%)`;
+            // Calculate percentage with 2 decimal places
+            let percentage = 0;
+            if (total > 0) {
+                percentage = (used / total) * 100;
+            }
+            
+            return `${usedFormatted} / ${totalFormatted} (${percentage.toFixed(2)}%)`;
         } catch (error) {
             console.error('Error parsing usage data:', error);
             return usage; // Return raw value if parsing fails
