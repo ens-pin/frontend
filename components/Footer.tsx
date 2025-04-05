@@ -18,7 +18,7 @@ export const Footer = () => {
           />
         </div>
         <div className="">
-          <Link href="/get-started">
+          <Link href="https://github.com/orgs/ens-pin/repositories">
             <button className="ml-4 px-6 py-2 rounded-full bg-white text-black hover:bg-white/80 transition">
               View Document
             </button>

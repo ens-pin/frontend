@@ -5,6 +5,8 @@ import ScrollReveal from "@/components/ScrollReveal";
 import Image from "next/image";
 import Dashboard from "./dashboard/page";
 import { Footer } from "@/components/Footer";
+import BubbleChart from "@/components/BubbleChart";
+import BubbleChartDemo from "@/components/BubbleChartDemo";
 
 export default function Home() {
   return (
@@ -12,6 +14,8 @@ export default function Home() {
       <>
         <Navbar />
         <Hero />
+        {/* <BubbleChartDemo/> */}
+
         <ScrollReveal>
           ENSPin makes sure your IPFS content stays alive
         </ScrollReveal>

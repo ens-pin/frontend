@@ -9,10 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "framer-motion": "^12.6.3",
-    "gsap": "^3.12.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "d3": "^7.9.0",
+    "framer-motion": "^12.6.3",
+    "gsap": "^3.12.7",
     "lucide-react": "^0.487.0",
     "next": "15.2.4",
     "ogl": "^1.0.11",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/d3": "^7.4.3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

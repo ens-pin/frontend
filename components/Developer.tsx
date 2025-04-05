@@ -18,16 +18,16 @@ const developers = [
   },
   {
     id: 3,
-    name: "Weihup",
+    name: "Junheng",
     photo: "/",
-    color: "#3178C6",
+    color: "#47A248",
     description: "Frontend engineer & UI/UX enthusiast",
   },
   {
     id: 4,
-    name: "Junheng",
+    name: "Weihup",
     photo: "/",
-    color: "#47A248",
+    color: "#3178C6",
     description: "Frontend engineer & UI/UX enthusiast",
   },
   {
