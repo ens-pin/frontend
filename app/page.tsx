@@ -14,8 +14,6 @@ export default function Home() {
       <>
         <Navbar />
         <Hero />
-        {/* <BubbleChartDemo/> */}
-
         <ScrollReveal>
           ENSPin makes sure your IPFS content stays alive
         </ScrollReveal>
