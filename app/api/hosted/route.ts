@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const API_URL = 'http://192.168.103.67:42069';
+const API_URL = process.env.HOSTED_API_URL;
 
 /**
  * GET /api/hosted

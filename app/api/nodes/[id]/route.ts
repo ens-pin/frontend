@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
-const API_URL = 'http://192.168.103.67:42069';
+const API_URL = process.env.NODE_ID_API_URL;
 
 interface RouteParams {
   params: {
@@ -15,31 +15,31 @@ interface RouteParams {
 export async function GET(request: Request, { params }: RouteParams) {
   const { id } = params;
   const searchParams = new URL(request.url).searchParams;
-  const getUsage = searchParams.get('usage') === 'true';
-  
+  const getUsage = searchParams.get("usage") === "true";
+
   try {
     const response = await fetch(`${API_URL}/nodes/${id}`);
-    
+
     if (!response.ok) {
       throw new Error(`Failed to fetch node: ${response.status}`);
     }
-    
+
     const data = await response.json();
     const nodeData = data.node || data;
-    
+
     if (getUsage) {
       // Return just the usage information if requested
-      return NextResponse.json({ 
-        usage: nodeData.usage 
+      return NextResponse.json({
+        usage: nodeData.usage,
       });
     }
-    
+
     // Format the response according to the expected output
     const result = {
       message: "Node details",
-      node: nodeData
+      node: nodeData,
     };
-    
+
     return NextResponse.json(result);
   } catch (error) {
     console.error(`Error fetching node ${id}:`, error);
@@ -56,16 +56,16 @@ export async function GET(request: Request, { params }: RouteParams) {
  */
 export async function DELETE(request: Request, { params }: RouteParams) {
   const { id } = params;
-  
+
   try {
     const response = await fetch(`${API_URL}/nodes/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
-    
+
     if (!response.ok) {
       throw new Error(`Failed to delete node: ${response.status}`);
     }
-    
+
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
