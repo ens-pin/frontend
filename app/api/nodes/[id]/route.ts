@@ -2,17 +2,16 @@ import { NextResponse } from "next/server";
 
 const API_URL = process.env.NODE_ID_API_URL;
 
-interface RouteParams {
-  params: {
-    id: string;
-  };
+type Props = {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
 }
 
 /**
  * GET /api/nodes/[id]
  * Gets a specific node by ID
  */
-export async function GET(request: Request, { params }: RouteParams) {
+export async function GET(request: Request, { params }: Props) {
   const { id } = params;
   const searchParams = new URL(request.url).searchParams;
   const getUsage = searchParams.get("usage") === "true";
@@ -54,7 +53,7 @@ export async function GET(request: Request, { params }: RouteParams) {
  * DELETE /api/nodes/[id]
  * Deletes a node by ID
  */
-export async function DELETE(request: Request, { params }: RouteParams) {
+export async function DELETE(request: Request, { params }: Props) {
   const { id } = params;
 
   try {
