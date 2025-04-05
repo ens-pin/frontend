@@ -14,10 +14,10 @@ const Hero = () => {
           Hey, this is
         </h1>
         <h1 className="bg-gradient-to-br from-white to-blue-400 bg-clip-text font-extrabold leading-tight text-transparent text-5xl md:text-9xl">
-            PinSync
+            ENS Pin!
         </h1>
         <p className="max-w-xl text-base md:text-lg text-gray-300">
-            You flex the name. ENS pin your receipts.
+            You flex the name, ENS pin for you.
         </p>
         <div className="flex space-x-4">
           <motion.button

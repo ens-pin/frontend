@@ -45,7 +45,7 @@ const Developer = () => {
             <div className="max-w-[1200px] mx-auto px-4 text-center">
             <h2 className="text-5xl text-gray-200 font-bold mb-4">Project Developers</h2>
             <p className="text-gray-400 text-lg mb-10">
-                Meet the builders behind this ENS Pin project — developers skilled in frontend, backend, and blockchain.
+                Meet the builders behind this ENS Pin project.
             </p>
 
             <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
