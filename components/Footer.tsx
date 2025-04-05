@@ -5,7 +5,7 @@ import github from "@/public/github.svg";
 
 export const Footer = () => {
   return (
-    <footer className="bg-[#121212] text-white p-8 rounded-2xl border border-gray-700 mx-4 md:mx-auto max-w-7xl">
+    <footer className="bg-[#121212] text-white p-8 rounded-2xl border border-gray-700 mx-4 md:mx-auto max-w-7xl" id="contact">
       <div className="flex justify-between items-center">
         <div>
           <Image
