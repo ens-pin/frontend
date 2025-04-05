@@ -16,13 +16,7 @@ export default function BubbleChartDemo() {
   ]
 
   return (
-    <div className="flex flex-col items-center p-4">
-      <h1 className="text-2xl font-bold mb-6">Interactive Bubble Chart</h1>
-      <div className="border rounded-lg shadow-lg">
         <BubbleChart data={bubbleData} width={800} height={600} maxBubbleSize={140} />
-      </div>
-      <p className="mt-4 text-gray-600">Move your cursor around the bubbles to see them react and interact</p>
-    </div>
   )
 }
 

@@ -157,11 +157,11 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
       ref={svgRef}
       width={width}
       height={height}
-      className="bg-white rounded-lg"
+      className="bg-transparent rounded-lg mx-auto"
     >
       {/* Enhanced drop shadow filter for 3D look */}
       <defs>
-        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+        <filter id="shadow" x="-50%" y="-50%" width="300%" height="200%">
           <feDropShadow
             dx="0"
             dy="3"

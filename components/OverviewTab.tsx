@@ -7,6 +7,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import BubbleChartDemo from './BubbleChartDemo';
 
 const nodeIsOnline = true; // This would be replaced with actual Docker node status check
 
@@ -58,12 +59,16 @@ export const OverviewTab = () => {
   return (
     <>
       <h1 className="text-4xl font-bold mb-6 text-white">Dashboard Overview</h1>
-      <div className="bg-black p-6 rounded-lg border border-gray-800">
+      {/* <h3 className="text-2xl font-semibold mb-8 text-gray-300">IPFS Node Statistics in Bubble</h3> */}
+      <BubbleChartDemo/>
+      {/* <div className="bg-black p-6 rounded-lg border border-gray-800">
         <h3 className="text-2xl font-semibold mb-8 text-gray-300">IPFS Node Statistics</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div className="border-b md:border-b-0 md:border-r border-gray-800 pb-4 md:pb-0 md:pr-4">
             <p className="text-gray-400 text-xl mb-1 text-center">Total IPFS Hash Pinned</p>
+            
             <ChartContainer config={lineChartConfig}>
+              
               <LineChart
                 accessibilityLayer
                 data={lineChartData}
@@ -129,7 +134,7 @@ export const OverviewTab = () => {
             </ChartContainer>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }; 
