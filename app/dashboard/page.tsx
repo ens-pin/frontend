@@ -8,10 +8,11 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-const pieChartData = [
-  { status: "Online", deviceNumber: 24, fill: "#22c55e" },  // Green color
-  { status: "Offline", deviceNumber: 6, fill: "#ef4444" },  // Red color
-]
+const nodeIsOnline = true; // This would be replaced with actual Docker node status check
+
+const pieChartData = nodeIsOnline 
+  ? [{ status: "Online", value: 100, fill: "#22c55e" }]  // Online state
+  : [{ status: "Offline", value: 100, fill: "#ef4444" }]; // Offline state
 
 const lineChartData = [
   { month: "January", pinnedHash: 186 },
@@ -30,7 +31,7 @@ const lineChartData = [
 
 const pieChartConfig = {
   devices: {
-    label: "Devices",
+    label: "Node Status",
   },
   online: {
     label: "Online",
@@ -60,8 +61,7 @@ export default function Dashboard() {
     };
 
     const totalActiveDevices = useMemo(() => {
-        return pieChartData.reduce((acc, curr) => 
-            curr.status === "Online" ? acc + curr.deviceNumber : acc, 0)
+        return pieChartData[0]?.value === 100 ? "ONLINE" : "OFFLINE"
     }, [])
     
 
@@ -70,8 +70,8 @@ export default function Dashboard() {
         <>
             <h1 className="text-4xl font-bold mb-6 text-white">Dashboard Overview</h1>
             <div className="bg-black p-6 rounded-lg border border-gray-800">
-                <h3 className="text-2xl font-semibold mb-8 text-gray-300">System Statistics</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <h3 className="text-2xl font-semibold mb-8 text-gray-300">IPFS Node Statistics</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="border-b md:border-b-0 md:border-r border-gray-800 pb-4 md:pb-0 md:pr-4">
                         <p className="text-gray-400 text-xl mb-1 text-center">Total IPFS Hash Pinned</p>
                         <ChartContainer config={lineChartConfig}>
@@ -105,8 +105,8 @@ export default function Dashboard() {
                           </LineChart>
                         </ChartContainer>
                     </div>
-                    <div className="border-b md:border-b-0 md:border-r border-gray-800 pb-4 md:pb-0 md:px-4">
-                        <p className="text-gray-400 mb-2 text-xl text-center">Active Devices</p>
+                    <div className="md:pl-4">
+                        <p className="text-gray-400 mb-2 text-xl text-center">Node Status</p>
                         <ChartContainer
                             config={pieChartConfig}
                             className="mx-auto aspect-square max-h-[250px]"
@@ -118,11 +118,10 @@ export default function Dashboard() {
                               />
                               <Pie
                                 data={pieChartData}
-                                dataKey="deviceNumber"
+                                dataKey="value"
                                 nameKey="status"
                                 innerRadius={60}
                                 strokeWidth={5}
-                                label={false}
                               >
                                 {pieChartData.map((entry, index) => (
                                   <Cell key={`cell-${index}`} fill={entry.fill} />
@@ -130,15 +129,15 @@ export default function Dashboard() {
                                 <Label
                                   value={totalActiveDevices}
                                   position="center"
-                                  style={{ fill: 'white', fontSize: '30px', fontWeight: 'bold' }}
+                                  style={{ 
+                                    fill: nodeIsOnline ? '#22c55e' : '#ef4444', 
+                                    fontSize: '24px', 
+                                    fontWeight: 'bold' 
+                                  }}
                                 />
                               </Pie>
                             </PieChart>
                           </ChartContainer>
-                    </div>
-                    <div className="md:pl-4">
-                        <p className="text-gray-400 text-xl mb-1 text-center">Storage Used</p>
-                        <p className="text-3xl font-bold text-purple-400 text-center">1.2 TB</p>
                     </div>
                 </div>
             </div>
