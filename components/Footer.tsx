@@ -26,29 +26,6 @@ export const Footer = () => {
         </div>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-4">
-        {/* Use Cases */}
-        <div>
-          <h3 className="font-semibold">Use Cases</h3>
-          <ul className="mt-2 space-y-1">
-            <li>
-              <span className="text-blue-500 font-bold">AI</span>{" "}
-              <span className="text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full">
-                NEW
-              </span>
-            </li>
-            <li>Data / DePIN</li>
-            <li>RWA</li>
-            <li>Gaming</li>
-            <li>Dapps</li>
-            <li>NFTs</li>
-          </ul>
-        </div>
-
-        {/* XXX Section */}
-        <div>
-          <h3 className="font-semibold">XXX</h3>
-          <p className="text-gray-400">XXX</p>
-        </div>
 
         {/* Developers */}
         <div>
@@ -56,46 +33,18 @@ export const Footer = () => {
           <ul className="mt-2 space-y-1">
             <li>Developers Hub</li>
             <li>
-              <a href="#" className="text-blue-400">
+              <a href="/docs" className="text-blue-400">
                 Docs ↗
               </a>
             </li>
             <li>
-              <a href="#" className="text-blue-400">
+              <a href="https://github.com/ens-pin" className="text-blue-400">
                 Source Code ↗
-              </a>
-            </li>
-            <li>
-              <a href="#" className="text-blue-400">
-                Courses ↗
               </a>
             </li>
           </ul>
         </div>
 
-        {/* Ecosystem */}
-        <div>
-          <h3 className="font-semibold">Ecosystem</h3>
-          <ul className="mt-2 space-y-1">
-            <li>Partners</li>
-            <li>Roadmap</li>
-            <li>
-              <a href="#" className="text-blue-400">
-                Staking ↗
-              </a>
-            </li>
-            <li>
-              <a href="#" className="text-blue-400">
-                Block Explorer ↗
-              </a>
-            </li>
-            <li>
-              <a href="#" className="text-blue-400">
-                XXX ↗
-              </a>
-            </li>
-          </ul>
-        </div>
       </div>
 
       {/* Bottom Section */}
