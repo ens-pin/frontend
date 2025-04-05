@@ -1,6 +1,8 @@
 'use client';
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { NodeCount } from './NodeCount';
+import { HostedUsers } from './HostedUsers';
+import HostedUsersBubbleChart from './HostedUsersBubbleChart';
 
 interface Node {
     id: string;
@@ -302,6 +304,8 @@ URL: ${nodeUrl || '[Enter node URL]'}`}
                     <div className="p-4 text-center text-gray-400">No nodes found. Add your first IPFS node above.</div>
                 )}
             </div>
+            
+            <HostedUsers />
         </div>
     );
 } 

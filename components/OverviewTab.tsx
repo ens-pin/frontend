@@ -8,6 +8,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import BubbleChartDemo from './BubbleChartDemo';
+import HostedUsersBubbleChart from './HostedUsersBubbleChart';
 
 const nodeIsOnline = true; // This would be replaced with actual Docker node status check
 
@@ -60,7 +61,8 @@ export const OverviewTab = () => {
     <>
       <h1 className="text-4xl font-bold mb-6 text-white">Dashboard Overview</h1>
       {/* <h3 className="text-2xl font-semibold mb-8 text-gray-300">IPFS Node Statistics in Bubble</h3> */}
-      <BubbleChartDemo/>
+       {/* Add the bubble chart visualization */}
+       <HostedUsersBubbleChart />
       {/* <div className="bg-black p-6 rounded-lg border border-gray-800">
         <h3 className="text-2xl font-semibold mb-8 text-gray-300">IPFS Node Statistics</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

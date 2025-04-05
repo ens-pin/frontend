@@ -8,6 +8,7 @@ interface BubbleData {
   label: string;
   count: number;
   color?: string;
+  hash?: string;  // Add hash property for redirect
 }
 
 interface BubbleChartProps {
@@ -15,6 +16,7 @@ interface BubbleChartProps {
   maxBubbleSize?: number;
   width?: number;
   height?: number;
+  onBubbleClick?: (hash: string) => void;  // Add click handler
 }
 
 interface BubbleNode extends d3.SimulationNodeDatum {
@@ -32,6 +34,7 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
   maxBubbleSize = 160,
   width = 800,
   height = 600,
+  onBubbleClick
 }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [nodes, setNodes] = useState<BubbleNode[]>([]);
@@ -189,6 +192,8 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
           key={i}
           transform={`translate(${node.x}, ${node.y})`}
           style={{ transition: "transform 0.1s ease-out" }}
+          onClick={() => node.data.hash && onBubbleClick && onBubbleClick(node.data.hash)}
+          className={node.data.hash && onBubbleClick ? "cursor-pointer" : ""}
         >
           {/* Main bubble */}
           <circle
