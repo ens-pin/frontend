@@ -23,9 +23,9 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   children,
   scrollContainerRef,
   enableBlur = true,
-  baseOpacity = 0.1,
-  baseRotation = 3,
-  blurStrength = 4,
+  baseOpacity = 0.6,
+  baseRotation = 9,
+  blurStrength = 7,
   containerClassName = "",
   textClassName = "",
   rotationEnd = "bottom bottom",
@@ -34,14 +34,14 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   const containerRef = useRef<HTMLHeadingElement>(null);
 
   const splitText = useMemo(() => {
-    const maxWords = 10;
+    const maxWords = 30;
     const text = typeof children === "string" ? children : "";
     const trimmed = text.split(" ").slice(0, maxWords).join(" ");
 
     return trimmed.split(/(\s+)/).map((word, index) => {
       if (word.match(/^\s+$/)) return word;
       return (
-        <span className="inline-block" key={index}>
+        <span className="word inline-block" key={index}>
           {word}
         </span>
       );
@@ -69,6 +69,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
           start: "top bottom",
           end: rotationEnd,
           scrub: true,
+          markers: true,
         },
       }
     );
@@ -125,9 +126,19 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   ]);
 
   return (
-    <h2 ref={containerRef} className={`my-5 ${containerClassName}`}>
+    <h2 ref={containerRef} className={`my-5 w-full flex justify-center ${containerClassName}`}>
       <p
-        className={`text-[clamp(1.2rem,3vw,2.5rem)] leading-[1.5] font-semibold ${textClassName}`}
+        className={`
+          text-[clamp(5.5rem,7vw,10rem)]
+          leading-snug
+          font-extrabold
+          max-w-[800px]
+          w-full
+          line-clamp-4
+          break-words
+          text-center
+          ${textClassName}
+        `}
       >
         {splitText}
       </p>

@@ -3,16 +3,6 @@ import { Geist, Geist_Mono, Merriweather_Sans } from "next/font/google";
 import "./globals.css";
 import Aurora from "@/components/Aurora";
 
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
-
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
-
 const merriweather = Merriweather_Sans({
   subsets: ["latin"],
   weight: ["800", "600"],
@@ -30,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${merriweather.className} antialiased`}>
+      <body className={`${merriweather.className} antialiased dark`}>
         <div className="absolute inset-0 -z-10">
           <Aurora 
           colorStops={["#94B0FF", "#3A29FF", "#DDF7FF"]}

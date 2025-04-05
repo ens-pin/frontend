@@ -11,7 +11,7 @@ const developers = [
   },
   {
     id: 2,
-    name: "Xinrou.js",
+    name: "Xinrou",
     photo: "/",
     color: "#339933",
     description: "Frontend engineer & UI/UX enthusiast",
