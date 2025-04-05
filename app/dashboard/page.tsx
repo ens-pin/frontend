@@ -3,6 +3,7 @@ import { useState } from "react";
 import { OverviewTab } from "@/components/OverviewTab";
 import { DockerCliTab } from "@/components/DockerCliTab";
 import { SettingsTab } from "@/components/SettingsTab";
+import { CreateNodeTab } from "@/components/CreateNodeTab";
 
 export default function Dashboard() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -18,6 +19,8 @@ export default function Dashboard() {
                 return <OverviewTab />;
             case 'cli':
                 return <DockerCliTab />;
+            case 'create-node':
+                return <CreateNodeTab />;
             case 'settings':
                 return <SettingsTab />;
             default:
@@ -40,6 +43,12 @@ export default function Dashboard() {
                                 onClick={() => setActiveTab('overview')}
                             >
                                 Overview
+                            </li>
+                            <li 
+                                className={`p-2 rounded cursor-pointer ${activeTab === 'create-node' ? 'text-white' : 'hover:bg-gray-900'}`}
+                                onClick={() => setActiveTab('create-node')}
+                            >
+                                Create IPFS Node
                             </li>
                             <li 
                                 className={`p-2 rounded cursor-pointer ${activeTab === 'cli' ? 'text-white' : 'hover:bg-gray-900'}`}
