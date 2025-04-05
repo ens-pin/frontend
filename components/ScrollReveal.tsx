@@ -69,7 +69,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
           start: "top bottom",
           end: rotationEnd,
           scrub: true,
-          markers: true,
+          markers: false,
         },
       }
     );
