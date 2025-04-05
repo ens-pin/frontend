@@ -47,15 +47,18 @@ export function HostedUsers() {
     }
   };
 
-  // Format file size to human-readable format
+  // Format file size - KB if less than 1000KB, MB otherwise
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    const kilobytes = bytes / 1024;
     
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    // If less than 1000KB, display in KB
+    if (kilobytes < 1000) {
+      return kilobytes.toFixed(2) + ' KB';
+    }
     
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    // Otherwise display in MB
+    const megabytes = kilobytes / 1024;
+    return megabytes.toFixed(2) + ' MB';
   };
 
   return (

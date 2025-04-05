@@ -52,6 +52,25 @@ export default function HostedUsersBubbleChart() {
   const getBubbleData = () => {
     if (!users.length) return [];
 
+    // Format file size - KB if less than 1000KB, MB otherwise
+    const formatFileSize = (bytes: number) => {
+      const kilobytes = bytes / 1024;
+      
+      // If less than 1000KB, display in KB
+      if (kilobytes < 1000) {
+        return kilobytes.toFixed(2) + ' KB';
+      }
+      
+      // Otherwise display in MB
+      const megabytes = kilobytes / 1024;
+      return megabytes.toFixed(2) + ' MB';
+    };
+
+    // For bubble sizing (always use MB for consistent scale)
+    const bytesToMB = (bytes: number) => {
+      return bytes / (1024 * 1024);
+    };
+
     // Generate a color palette for the bubbles
     const generateColor = (index: number) => {
       const colors = [
@@ -67,12 +86,15 @@ export default function HostedUsersBubbleChart() {
       return colors[index % colors.length];
     };
 
-    return users.map((user, index) => ({
-      label: user.name,
-      count: user.file_size, // Use file size for the bubble size
-      color: generateColor(index),
-      hash: user.hash, // Store hash for redirect on click
-    }));
+    return users.map((user, index) => {
+      const fileSizeMB = bytesToMB(user.file_size);
+      return {
+        label: `${user.name} (${formatFileSize(user.file_size)})`,
+        count: fileSizeMB, // Use file size in MB for the bubble size
+        color: generateColor(index),
+        hash: user.hash, // Store hash for redirect on click
+      };
+    });
   };
 
   // Handle bubble click

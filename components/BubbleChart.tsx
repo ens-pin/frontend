@@ -211,18 +211,10 @@ const BubbleChart: React.FC<BubbleChartProps> = ({
             fill="url(#bubbleGradient)"
             opacity="0.4"
           />
-          <text
-              textAnchor="middle"
-              dy={-5}
-              fill="#fff"
-              fontSize={Math.min(16, node.radius / 4 + 8)}
-              fontWeight="bold"
-            >
-              {node.data.count}
-            </text>
+          {/* Text label only */}
           <text
             textAnchor="middle"
-            dy={15}
+            dy="0.35em"
             fill="#fff"
             fontSize={Math.min(14, node.radius / 5 + 6)}
           >
