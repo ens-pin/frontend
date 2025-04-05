@@ -1,10 +1,13 @@
 'use client';
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import { NodeCount } from './NodeCount';
 
 interface Node {
     id: string;
     name: string;
+    type: string;
     url: string;
+    usage?: string;
 }
 
 export function AddNodeTab() {
@@ -16,9 +19,37 @@ export function AddNodeTab() {
     const [nodes, setNodes] = useState<Node[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [deletingNodeId, setDeletingNodeId] = useState<string | null>(null);
 
-    // API base URL
-    const API_URL = 'http://192.168.103.67:42069';
+    // API routes
+    const API_NODES_ROUTE = '/api/nodes';
+
+    // Helper function to format storage values
+    const formatStorage = (usage: string) => {
+        try {
+            const [used, total] = usage.split(',').map(Number);
+            
+            // Format bytes to appropriate units
+            const formatBytes = (bytes: number) => {
+                if (bytes === 0) return '0 Bytes';
+                
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            };
+            
+            const usedFormatted = formatBytes(used);
+            const totalFormatted = formatBytes(total);
+            const percentage = total > 0 ? Math.round((used / total) * 100) : 0;
+            
+            return `${usedFormatted} / ${totalFormatted} (${percentage}%)`;
+        } catch (error) {
+            console.error('Error parsing usage data:', error);
+            return usage; // Return raw value if parsing fails
+        }
+    };
 
     // Fetch all nodes on component mount
     useEffect(() => {
@@ -31,12 +62,34 @@ export function AddNodeTab() {
         setError(null);
         
         try {
-            const response = await fetch(`${API_URL}/nodes`);
+            const response = await fetch(API_NODES_ROUTE);
             if (!response.ok) {
                 throw new Error(`Failed to fetch nodes: ${response.status}`);
             }
             const data = await response.json();
-            setNodes(data);
+            // The API returns data in the format: { message: string, nodes: Node[] }
+            if (data && data.nodes) {
+                // Fetch usage data for each node
+                const nodesWithUsage = await Promise.all(
+                    data.nodes.map(async (node: Node) => {
+                        try {
+                            const usageResponse = await fetch(`${API_NODES_ROUTE}/${node.id}?usage=true`);
+                            if (usageResponse.ok) {
+                                const usageData = await usageResponse.json();
+                                return { ...node, usage: usageData.usage };
+                            }
+                            return node;
+                        } catch (err) {
+                            console.error(`Error fetching usage for node ${node.id}:`, err);
+                            return node;
+                        }
+                    })
+                );
+                setNodes(nodesWithUsage);
+            } else {
+                setNodes([]);
+            }
+            console.log(data);
         } catch (err) {
             console.error('Error fetching nodes:', err);
             setError(err instanceof Error ? err.message : 'Unknown error occurred');
@@ -57,12 +110,14 @@ export function AddNodeTab() {
         setNodeAdded(false);
 
         try {
-            const response = await fetch(`${API_URL}/nodes`, {
+            // Create FormData object to handle form submission
+            const formData = new FormData();
+            formData.append('name', nodeName);
+            formData.append('url', nodeUrl);
+
+            const response = await fetch(API_NODES_ROUTE, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `name=${encodeURIComponent(nodeName)}&url=${encodeURIComponent(nodeUrl)}`,
+                body: formData,
             });
 
             if (!response.ok) {
@@ -87,9 +142,36 @@ export function AddNodeTab() {
         }
     };
 
+    // Handle node deletion
+    const handleDeleteNode = async (id: string) => {
+        setDeletingNodeId(id);
+        setError(null);
+        
+        try {
+            const response = await fetch(`${API_NODES_ROUTE}/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to delete node: ${response.status}`);
+            }
+
+            // Refresh the nodes list after deletion
+            fetchNodes();
+        } catch (err) {
+            console.error('Error deleting node:', err);
+            setError(err instanceof Error ? err.message : 'Failed to delete node');
+        } finally {
+            setDeletingNodeId(null);
+        }
+    };
+
     return (
         <div>
             <h1 className="text-4xl font-bold mb-6 text-white">Add IPFS Node</h1>
+            <div className="mb-6">
+                <NodeCount />
+            </div>
             <div className="bg-black p-6 rounded-lg border border-gray-800">
                 <h3 className="text-2xl font-semibold mb-6 text-gray-300">Node Connection</h3>
                 
@@ -181,9 +263,31 @@ URL: ${nodeUrl || '[Enter node URL]'}`}
                                     <div>
                                         <h4 className="text-xl font-medium text-white">{node.name}</h4>
                                         <p className="text-gray-400 mt-1">{node.url}</p>
+                                        <p className="text-xs text-gray-500 mt-1">Type: {node.type}</p>
+                                        <p className="text-xs text-gray-500 mt-1">ID: {node.id}</p>
+                                        {node.usage && (
+                                            <div className="mt-2">
+                                                <p className="text-xs text-gray-400">
+                                                    <span className="font-semibold">Storage:</span> {formatStorage(node.usage)}
+                                                </p>
+                                            </div>
+                                        )}
                                     </div>
-                                    <div className="bg-green-900/30 px-2 py-1 rounded text-xs text-green-400">
-                                        Connected
+                                    <div className="flex flex-col space-y-2">
+                                        <div className="bg-green-900/30 px-2 py-1 rounded text-xs text-green-400">
+                                            Connected
+                                        </div>
+                                        <button
+                                            onClick={() => handleDeleteNode(node.id)}
+                                            disabled={deletingNodeId === node.id}
+                                            className={`px-2 py-1 rounded text-xs ${
+                                                deletingNodeId === node.id
+                                                    ? 'bg-red-900/30 text-red-300 cursor-not-allowed'
+                                                    : 'bg-red-900/30 text-red-400 hover:bg-red-800/40'
+                                            }`}
+                                        >
+                                            {deletingNodeId === node.id ? 'Deleting...' : 'Delete'}
+                                        </button>
                                     </div>
                                 </div>
                             </div>
